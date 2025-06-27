@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Цифровая книга жалоб и предложений</title>
+<link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+<header>
+<img src="https://yu.edu.kz/wp-content/uploads/2023/01/blue_logo.png" alt="Yessenov University" class="logo">
+<h1>Книга жалоб и предложений</h1>
+<p>Вы можете анонимно оставить жалобу или идею для улучшения.</p>
+</header>
+
+<main>
+<a href="/complaints" class="btn">Оставить жалобу</a>
+<a href="/ideas" class="btn outline">Предложить идею</a>
+</main>
+
+<footer>
+<p>&copy; {{ year }} Yessenov University</p>
+</footer>
+</div>
+</body>
+</html>

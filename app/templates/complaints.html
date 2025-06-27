@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Оставить жалобу — Yessenov University</title>
+<link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+
+<body>
+<div class="container">
+<header>
+<img src="https://yu.edu.kz/wp-content/uploads/2023/01/blue_logo.png" alt="Yessenov University" class="logo">
+<h1>Оставить жалобу</h1>
+<p>Форма для подачи анонимной жалобы.</p>
+</header>
+
+<main>
+<form method="post" action="/complaints" class="complaint-form">
+<label for="name_surname">Имя и фамилия (необязательно):</label>
+<input type="text" id="name_surname" name="name_surname" placeholder="Иван Иванов">
+<label for="email">Email (необязательно):</label>
+<input type="email" id="email" name="email" placeholder="you@example.com">
+<label for="message">Текст жалобы:</label>
+<textarea id="message" name="message" rows="5" required placeholder="Опишите вашу жалобу..."></textarea>
+<button type="submit" class="btn">Отправить жалобу</button>
+</form>
+
+<hr style="margin: 3rem 0; border: none; border-top: 1px solid #ddd;">
+<h2>Последние жалобы</h2>
+
+{% if complaints %}
+<div class="complaint-list">
+{% for complaint in complaints %}
+<div class="complaint">
+<p class="complaint-meta">{{ complaint.name_surname or "Аноним" }} — {{ complaint.created_at.strftime("%d.%m.%Y") }}</p>
+<p class="complaint-message">{{ complaint.message }}</p>
+{% if complaint.admin_response %}
+<p class="complaint-response"><strong>Ответ администрации:</strong> {{ complaint.admin_response }}</p>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+
+<div class="pagination" style="margin-top: 2rem;">
+{% if has_prev %}<a href="?page={{ current_page - 1 }}" class="btn outline">← Назад</a>{% endif %}
+<span style="margin: 0 1rem;">Страница {{ current_page }} из {{ total_pages }}</span>
+{% if has_next %}<a href="?page={{ current_page + 1 }}" class="btn outline">Вперёд →</a>{% endif %}
+</div>
+{% else %}<p>Пока жалоб нет.</p>{% endif %}
+</main>
+
+<footer>
+<p>&copy; {{ year }} Yessenov University</p>
+</footer>
+
+</div>
+</body>
+</html>
