@@ -1,6 +1,9 @@
 .venv/
 venv/
 .env
+.env.docker
+.env.docker.test
+.env.test
 __pycache__/
 *.py[cod]
 *.pyc
@@ -11,4 +14,3 @@ __pycache__/
 .vscode
 .idea
 .flake8
-.env.docker

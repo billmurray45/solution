@@ -114,3 +114,19 @@ form.complaint-form textarea {
     margin-top: 1rem;
     color: #0a6c3f;
 }
+
+.btn.danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn.outline.danger {
+  background-color: transparent;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+}
+
+.btn.outline.danger:hover {
+  background-color: #f8d7da;
+}

@@ -10,6 +10,7 @@ class Complaint(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name_surname: Mapped[str] = mapped_column(String, nullable=True)
+    email: Mapped[str] = mapped_column(String, nullable=True)
     message: Mapped[str] = mapped_column(Text, nullable=False)
     moderated: Mapped[ModerationStatus] = mapped_column(
         Enum(ModerationStatus, name="moderation_status_enum"),

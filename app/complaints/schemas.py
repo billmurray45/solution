@@ -1,14 +1,12 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
-from app.complaints.enums import ModerationStatus
 
 
 class ComplaintBase(BaseModel):
     name_surname: Optional[str] = Field(default=None, description="Name and surname of the person")
     email: Optional[str] = Field(default=None, description="Email address of the person")
     message: str = Field(..., description="Description of the complaint")
-    moderated: ModerationStatus = Field(default=ModerationStatus.OPEN, description="Moderation status")
 
 
 class ComplaintCreate(ComplaintBase):

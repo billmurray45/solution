@@ -21,10 +21,8 @@ async def get_complaints(session: AsyncSession, page: int = 1, page_size: int = 
 async def delete_complaint(complaint_id: int, session: AsyncSession) -> dict | None:
     result = await session.execute(select(Complaint).where(Complaint.id == complaint_id))
     complaint = result.scalars().first()
-
     if not complaint:
         return None
-
     await session.delete(complaint)
     await session.commit()
     return {"message": "Complaint successfully deleted!"}
