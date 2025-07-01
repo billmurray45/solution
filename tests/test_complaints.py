@@ -12,8 +12,8 @@ async def test_get_complaints_page(async_client, db_session):
 async def test_create_complaint(async_client, db_session):
     form_data = {
         "name_surname": "John Doe",
-        "email": "john@example.com",
-        "message": "Test complaint message"
+        "email": "",
+        "message": "how are u bro how are u bro"
     }
 
     response = await async_client.post("/complaints", data=form_data)
@@ -21,12 +21,12 @@ async def test_create_complaint(async_client, db_session):
     assert response.headers["location"] == "/complaints"
 
     from app.complaints.models import Complaint  # noqa: E402
-    complaint = await db_session.execute(select(Complaint).where(Complaint.email == "john@example.com"))
+    complaint = await db_session.execute(select(Complaint).where(Complaint.email == ""))
     complaint = complaint.scalar_one_or_none()
 
     assert complaint is not None
     assert complaint.name_surname == "John Doe"
-    assert complaint.message == "Test complaint message"
+    assert complaint.message == "how are u bro how are u bro"
 
 
 @pytest.mark.anyio

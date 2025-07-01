@@ -6,7 +6,7 @@ from datetime import datetime
 class ComplaintBase(BaseModel):
     name_surname: Optional[str] = Field(default=None, description="Name and surname of the person")
     email: Optional[str] = Field(default=None, description="Email address of the person")
-    message: str = Field(..., description="Description of the complaint")
+    message: str = Field(..., min_length=20, description="Description of the complaint")
 
 
 class ComplaintCreate(ComplaintBase):
