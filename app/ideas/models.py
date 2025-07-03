@@ -5,8 +5,8 @@ from datetime import datetime
 from app.core.enums import ModerationStatus
 
 
-class Complaint(Base):
-    __tablename__ = "complaints"
+class Idea(Base):
+    __tablename__ = "ideas"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name_surname: Mapped[str] = mapped_column(String, nullable=True)

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Оставить идею — Yessenov University{% endblock %}
+{% block header_title %}Оставить идею{% endblock %}
+{% block header_desc %}Форма для подачи идеи.{% endblock %}
+
+{% block content %}
+<form method="post" action="/ideas" class="idea-form">
+<label for="name_surname">Имя и фамилия (необязательно):</label>
+<input type="text" id="name_surname" name="name_surname" placeholder="Иван Иванов">
+<label for="email">Email (необязательно):</label>
+<input type="email" id="email" name="email" placeholder="you@example.com">
+<label for="subject">Тема идеи:</label>
+<input type="text" id="subject" name="subject" placeholder="Тема вашей идеи" required minlength="5" maxlength="100">
+<label for="message">Текст идеи:</label>
+<textarea id="message" name="message" rows="5" required placeholder="Опишите вашу идею..." minlength="20"></textarea>
+<button type="submit" class="btn">Отправить идеиу</button>
+</form>
+<hr style="margin: 3rem 0; border: none; border-top: 1px solid #ddd;">
+<h2>Последние идеи</h2>
+{% if ideas %}
+<div class="idea-list">
+{% for idea in ideas %}
+<div class="idea">
+<p class="idea-meta">{{ idea.name_surname or "Аноним" }} — {{ idea.created_at.strftime("%d.%m.%Y") }}</p>
+<p class="idea-subject"><strong>Тема:</strong> {{ idea.subject }}</p>
+<p class="idea-message">{{ idea.message }}</p>
+{% if idea.admin_response %}
+<p class="idea-response"><strong>Ответ администрации:</strong> {{ idea.admin_response }}</p>
+{% endif %}
+<form method="post" action="/ideas/{{ idea.id }}/delete" style="margin-top: 0.5rem;">
+<button type="submit" class="btn outline danger" onclick="return confirm('Удалить идеиу?');">Удалить</button>
+</form>
+</div>
+{% endfor %}
+</div>
+
+<div class="pagination" style="margin-top: 2rem;">
+{% if has_prev %}
+<a href="?page={{ current_page - 1 }}" class="btn outline">← Назад</a>
+{% endif %}
+<span style="margin: 0 1rem;">Страница {{ current_page }} из {{ total_pages }}</span>
+{% if has_next %}
+<a href="?page={{ current_page + 1 }}" class="btn outline">Вперёд →</a>
+{% endif %}
+</div>
+{% else %}
+<p>Пока идеи нет.</p>
+{% endif %}
+{% endblock %}

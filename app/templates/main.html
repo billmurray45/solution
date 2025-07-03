@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.complaint-desc {
+  padding: 18px 0 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.complaint-theme-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px;
+  color: #d35400;
+  margin-bottom: 2px;
+}
+.complaint-theme-row .emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+.complaint-theme {
+  font-size: 17px;
+  font-weight: 600;
+  color: #d35400;
+}
+.complaint-message {
+  font-size: 16px;
+  color: #23272f;
+  font-weight: 400;
+  margin-bottom: 4px;
+  line-height: 1.45;
+}
+.complaint-date {
+  font-size: 14px;
+  color: #a0a3ab;
+  margin-top: 2px;
+}
+.empty-msg {
+  color: #a0a3ab;
+  font-size: 16px;
+}
+</style>
+<div class="row-two-cols" style="display: flex; gap: 24px; margin-bottom: 32px;">
+  <!-- Complaint card -->
+<div class="card" style="flex:1;">
+  <div class="card-header">
+    <div class="card-title">Последняя жалоба</div>
+  </div>
+  <div class="card-desc complaint-desc">
+    {% if last_complaint %}
+      <div class="complaint-theme-row">
+        <span class="emoji">⚠️</span>
+        <span class="complaint-theme">
+          {{ last_complaint.theme or 'Без темы' }}
+        </span>
+      </div>
+      <div class="complaint-message">
+        {{ last_complaint.message }}
+      </div>
+      <div class="complaint-date">
+        {{ last_complaint.created_at.strftime('%d.%m.%Y %H:%M') if last_complaint.created_at else '' }}
+      </div>
+    {% else %}
+      <div class="empty-msg">Жалоб пока нет</div>
+    {% endif %}
+  </div>
+  <div class="card-footer">
+    <a href="/complaints" class="card-btn">Все жалобы&nbsp;→</a>
+  </div>
+</div>
+
+
+  <!-- Idea card -->
+  <div class="card" style="flex:1;">
+    <div>
+      <div class="card-header">
+        <div class="card-icon">
+          <span style="font-size:28px;">💡</span>
+        </div>
+        <div class="card-title">Последняя идея</div>
+      </div>
+      <div class="card-desc" style="min-height:60px;">
+        {% if last_idea %}
+          {{ last_idea.message }}
+        {% else %}
+          Идей пока нет
+        {% endif %}
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="/ideas" class="card-btn">Все идеи&nbsp;→</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

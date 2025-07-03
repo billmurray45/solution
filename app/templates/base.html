@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}Yessenov ID{% endblock %}</title>
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+<aside class="sidebar">
+<div>
+<div class="sidebar-header"><span style="font-size:22px;">🦉</span> YESSENOV ID</div>
+<div class="user-section">
+<div class="avatar">{% block user_avatar %}AT{% endblock %}</div>
+<div class="user-info">
+<div class="name">{% block user_name %}Альбина Тилекбай{% endblock %}</div>
+<div class="role">{% block user_role %}преподаватель{% endblock %}</div>
+</div>
+</div>
+<nav class="sidebar-menu">
+<ul>
+<li><a href="#"><span class="icon">📰</span>Новости</a></li>
+<li><a href="#"><span class="icon">📅</span>Мероприятия</a></li>
+<li><a href="#"><span class="icon">📚</span>Образование</a></li>
+<li><a href="#"><span class="icon">📖</span>Наука</a></li>
+<li><a href="#"><span class="icon">👨‍👩‍👧‍👦</span>Воспитание</a></li>
+<li><a href="#"><span class="icon">🗂️</span>Е-услуги</a></li>
+<li><a href="#"><span class="icon">🤖</span>YessenovBot</a></li>
+<li><a href="#"><span class="icon">🛠️</span>Администрирование</a></li>
+</ul>
+</nav>
+</div>
+<div class="sidebar-footer">
+<ul>
+<li><a href="#"><span class="icon">💼</span>Портфолио</a></li>
+<li><a href="#"><span class="icon">⚙️</span>Настройки</a></li>
+</ul>
+<div>
+<a class="logout" href="#"><span class="icon">🚪</span>Выйти</a>
+</div>
+</div>
+</aside>
+<main class="main-content">
+<div class="top-bar">
+<div class="notifications">
+<span class="bell">🔔</span>
+<span class="badge">{% block notif_count %}6{% endblock %}</span>
+</div>
+<select>
+<option>Русский</option>
+<option>English</option>
+</select>
+</div>
+<div class="content">
+{% block content %}{% endblock %}
+</div>
+</main>
+</div>
+</body>
+</html>
