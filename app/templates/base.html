@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>{% block title %}Yessenov ID{% endblock %}</title>
-<link rel="stylesheet" href="/static/styles.css">
 <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 <div class="container">
 <aside class="sidebar">
 <div>
-<div class="sidebar-header"><span style="font-size:22px;">🦉</span> YESSENOV ID</div>
+<div class="sidebar-header"><img src="{{ url_for('static', path='images/logo2.png') }}" alt="Yessenov Logo">YU SOLUTION</div>
 <div class="user-section">
 <div class="avatar">{% block user_avatar %}AT{% endblock %}</div>
 <div class="user-info">
@@ -20,24 +20,25 @@
 </div>
 <nav class="sidebar-menu">
 <ul>
-<li><a href="#"><span class="icon">📰</span>Новости</a></li>
-<li><a href="#"><span class="icon">📅</span>Мероприятия</a></li>
-<li><a href="#"><span class="icon">📚</span>Образование</a></li>
-<li><a href="#"><span class="icon">📖</span>Наука</a></li>
-<li><a href="#"><span class="icon">👨‍👩‍👧‍👦</span>Воспитание</a></li>
-<li><a href="#"><span class="icon">🗂️</span>Е-услуги</a></li>
-<li><a href="#"><span class="icon">🤖</span>YessenovBot</a></li>
-<li><a href="#"><span class="icon">🛠️</span>Администрирование</a></li>
+<li><a href="#"><i class="fa-solid fa-newspaper icon"></i>Новости</a></li>
+<li><a href="#"><i class="fa-solid fa-calendar-days icon"></i>Мероприятия</a></li>
+<li><a href="#"><i class="fa-solid fa-book icon"></i>Образование</a></li>
+<li><a href="#"><i class="fa-solid fa-book-open icon"></i>Наука</a></li>
+<li><a href="#"><i class="fa-solid fa-people-group icon"></i>Воспитание</a></li>
+<li><a href="#"><i class="fa-solid fa-folder-open icon"></i>Е-услуги</a></li>
+<li><a href="#"><i class="fa-brands fa-android icon"></i>YessenovBot</a></li>
+<li><a href="#"><i class="fa-solid fa-screwdriver-wrench icon"></i>Администрирование</a></li>
 </ul>
 </nav>
 </div>
 <div class="sidebar-footer">
 <ul>
-<li><a href="#"><span class="icon">💼</span>Портфолио</a></li>
-<li><a href="#"><span class="icon">⚙️</span>Настройки</a></li>
+<li><a href="#"><i class="fa-solid fa-briefcase icon"></i>Портфолио</a></li>
+<li><a href="#"><i class="fa-solid fa-gear icon"></i>Настройки</a></li>
+{% if current_user %}<li><a href="/logout"><i class="fa-solid fa-right-from-bracket icon"></i>Выйти</a></li>{% else %}
+<li><a href="javascript:void(0)" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>Войти</a></li>{% endif %}
 </ul>
 <div>
-<a class="logout" href="#"><span class="icon">🚪</span>Выйти</a>
 </div>
 </div>
 </aside>
@@ -57,5 +58,65 @@
 </div>
 </main>
 </div>
+{% if not current_user %}<div id="loginModal" class="modal" style="display:none;">
+<div class="modal-content">
+<span class="modal-close" onclick="closeLoginModal()">&times;</span>
+<form method="post" action="/login" class="login-form" id="modalLoginForm" autocomplete="on">
+<div class="form-title">Вход в систему</div>
+<div id="modal-login-error" class="form-errors" style="display:none;"></div>
+<div class="form-row">
+<label for="modal-username">Логин:</label>
+<input type="text" id="modal-username" name="username" required>
+</div>
+<div class="form-row">
+<label for="modal-password">Пароль:</label>
+<input type="password" id="modal-password" name="password" required minlength="6">
+</div>
+<button type="submit" class="btn site-btn">Войти</button>
+</form>
+</div>
+</div>{% endif %}
 </body>
+{% if not current_user %}<script>
+function openLoginModal() {
+document.getElementById('loginModal').style.display = 'block';
+document.getElementById('modalLoginForm').reset();
+document.getElementById('modal-login-error').style.display = 'none';
+}
+function closeLoginModal() {
+document.getElementById('loginModal').style.display = 'none';
+}
+window.onclick = function(event) {
+var modal = document.getElementById('loginModal');
+if (event.target == modal) { modal.style.display = "none"; }
+}
+document.addEventListener("DOMContentLoaded", function() {
+var form = document.getElementById("modalLoginForm");
+if (form) {
+form.onsubmit = async function(e) {
+e.preventDefault();
+var errDiv = document.getElementById('modal-login-error');
+errDiv.style.display = "none";
+errDiv.innerHTML = "";
+var formData = new FormData(form);
+let response = await fetch("/login", {
+method: "POST",
+body: formData,
+headers: { "X-Requested-With": "XMLHttpRequest" }
+});
+if (response.ok) {
+window.location.reload();
+} else {
+let errText = "Ошибка входа!";
+try {
+let data = await response.json();
+errText = data.detail || errText;
+} catch {}
+errDiv.style.display = "block";
+errDiv.innerHTML = "<ul><li>" + errText + "</li></ul>";
+}
+}
+}
+});
+</script>{% endif %}
 </html>

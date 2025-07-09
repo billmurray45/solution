@@ -1,98 +1,123 @@
 {% extends "base.html" %}
-
 {% block content %}
 <style>
-.complaint-desc {
-  padding: 18px 0 14px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 26px;
 }
-.complaint-theme-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 17px;
-  color: #d35400;
-  margin-bottom: 2px;
+.news-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(19,37,78,0.07);
+  overflow: hidden;
+  transition: box-shadow 0.18s;
 }
-.complaint-theme-row .emoji {
-  font-size: 20px;
-  line-height: 1;
+.news-card a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
 }
-.complaint-theme {
-  font-size: 17px;
-  font-weight: 600;
-  color: #d35400;
+.news-thumb img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #e7eaf3;
 }
-.complaint-message {
-  font-size: 16px;
-  color: #23272f;
-  font-weight: 400;
-  margin-bottom: 4px;
-  line-height: 1.45;
+.news-info {
+  padding: 16px 14px 18px 14px;
 }
-.complaint-date {
+.news-date {
   font-size: 14px;
-  color: #a0a3ab;
-  margin-top: 2px;
+  color: #2371c4;
+  margin-bottom: 7px;
 }
-.empty-msg {
-  color: #a0a3ab;
-  font-size: 16px;
+.news-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #182755;
 }
 </style>
-<div class="row-two-cols" style="display: flex; gap: 24px; margin-bottom: 32px;">
-  <!-- Complaint card -->
-<div class="card" style="flex:1;">
-  <div class="card-header">
-    <div class="card-title">Последняя жалоба</div>
-  </div>
-  <div class="card-desc complaint-desc">
-    {% if last_complaint %}
-      <div class="complaint-theme-row">
-        <span class="emoji">⚠️</span>
-        <span class="complaint-theme">
-          {{ last_complaint.theme or 'Без темы' }}
-        </span>
-      </div>
-      <div class="complaint-message">
-        {{ last_complaint.message }}
-      </div>
-      <div class="complaint-date">
-        {{ last_complaint.created_at.strftime('%d.%m.%Y %H:%M') if last_complaint.created_at else '' }}
-      </div>
-    {% else %}
-      <div class="empty-msg">Жалоб пока нет</div>
-    {% endif %}
-  </div>
-  <div class="card-footer">
-    <a href="/complaints" class="card-btn">Все жалобы&nbsp;→</a>
-  </div>
+
+<h2>Новости</h2>
+<div class="subtitle">Новые заявки</div>
+
+<div class="news-list">
+{% if news %}
+{% for item in news %}
+<div class="news-card">
+<a href="{{ item.link }}" target="_blank">
+<div class="news-thumb"><img src="{{ item.image }}" alt="{{ item.title }}"></div>
+<div class="news-info">
+<div class="news-date">{{ item.date }}</div>
+<div class="news-title">{{ item.title }}</div>
+</div>
+</a>
+</div>
+{% endfor %}
+{% else %}
+<div style="color:#b3bac5;margin-top:22px;">Новостей пока нет.</div>
+{% endif %}
 </div>
 
-
-  <!-- Idea card -->
-  <div class="card" style="flex:1;">
-    <div>
-      <div class="card-header">
-        <div class="card-icon">
-          <span style="font-size:28px;">💡</span>
-        </div>
-        <div class="card-title">Последняя идея</div>
-      </div>
-      <div class="card-desc" style="min-height:60px;">
-        {% if last_idea %}
-          {{ last_idea.message }}
-        {% else %}
-          Идей пока нет
-        {% endif %}
-      </div>
-    </div>
-    <div class="card-footer">
-      <a href="/ideas" class="card-btn">Все идеи&nbsp;→</a>
-    </div>
-  </div>
+<h2>Жалобы</h2>
+<div class="subtitle">Новые заявки</div>
+<div class="card-list">
+{% if last_complaints %}
+{% for complaint in last_complaints %}
+<div class="complaint-card">
+<div class="complaint-header">
+<div class="complaint-author">{{ complaint.name_surname or "Аноним" }}</div>
+<div class="complaint-date-tag">{{ complaint.created_at.strftime("%d.%m.%Y") }}</div>
+<div class="complaint-reaction-buttons">
+<button class="complaint-reaction-btn complaint-like-btn">👍 5</button>
+<button class="complaint-reaction-btn complaint-dislike-btn">👎 0</button>
+</div>
+</div>
+<div class="complaint-card-content">
+<div class="complaint-content-header">
+<div class="complaint-content-title">{{ complaint.subject }}</div>
+<div class="complaint-content-reactions">
+<div class="complaint-content-reaction">💬 0</div>
+</div>
+</div>
+<div class="complaint-content-text">{{ complaint.message }}</div>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="no-complaints-msg">Пока жалоб нет.</div>
+{% endif %}
+</div>
+<h2>Идеи</h2>
+<div class="subtitle">Новые заявки</div>
+<div class="card-list">
+{% if last_ideas %}
+{% for idea in last_ideas %}
+<div class="complaint-card">
+<div class="complaint-header">
+<div class="complaint-author">{{ idea.name_surname or "Аноним" }}</div>
+<div class="complaint-date-tag">{{ idea.created_at.strftime("%d.%m.%Y") }}</div>
+<div class="complaint-reaction-buttons">
+<button class="complaint-reaction-btn complaint-like-btn">👍 5</button>
+<button class="complaint-reaction-btn complaint-dislike-btn">👎 0</button>
+</div>
+</div>
+<div class="complaint-card-content">
+<div class="complaint-content-header">
+<div class="complaint-content-title">{{ idea.subject }}</div>
+<div class="complaint-content-reactions">
+<div class="complaint-content-reaction">💬 0</div>
+</div>
+</div>
+<div class="complaint-content-text">{{ idea.message }}</div>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="no-complaints-msg">Пока идеи нет.</div>
+{% endif %}
 </div>
 {% endblock %}

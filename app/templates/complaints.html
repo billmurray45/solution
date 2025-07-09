@@ -2,49 +2,71 @@
 
 {% block title %}Оставить жалобу — Yessenov University{% endblock %}
 {% block header_title %}Оставить жалобу{% endblock %}
-{% block header_desc %}Форма для подачи анонимной жалобы.{% endblock %}
+{% block header_desc %}Анонимная форма для подачи жалобы. Ваше имя и e-mail не обязательны.{% endblock %}
 
 {% block content %}
+<div class="card complaint-form-card">
 <form method="post" action="/complaints" class="complaint-form">
-<label for="name_surname">Имя и фамилия (необязательно):</label>
+<div class="form-title">Оставить жалобу</div>
+<label for="name_surname">Имя и фамилия <span class="hint">(необязательно)</span>:</label>
 <input type="text" id="name_surname" name="name_surname" placeholder="Иван Иванов">
-<label for="email">Email (необязательно):</label>
+<label for="email">Email <span class="hint">(необязательно)</span>:</label>
 <input type="email" id="email" name="email" placeholder="you@example.com">
 <label for="subject">Тема жалобы:</label>
 <input type="text" id="subject" name="subject" placeholder="Тема вашей жалобы" required minlength="5" maxlength="100">
 <label for="message">Текст жалобы:</label>
 <textarea id="message" name="message" rows="5" required placeholder="Опишите вашу жалобу..." minlength="20"></textarea>
-<button type="submit" class="btn">Отправить жалобу</button>
+<button type="submit" class="btn site-btn">Отправить жалобу</button>
 </form>
-<hr style="margin: 3rem 0; border: none; border-top: 1px solid #ddd;">
+</div>
+
+<div class="content">
 <h2>Последние жалобы</h2>
+<p class="subtitle">Здесь отображаются только прошедшие модерацию жалобы.</p>
 {% if complaints %}
-<div class="complaint-list">
+<div class="complaints-grid">
 {% for complaint in complaints %}
-<div class="complaint">
-<p class="complaint-meta">{{ complaint.name_surname or "Аноним" }} — {{ complaint.created_at.strftime("%d.%m.%Y") }}</p>
-<p class="complaint-subject"><strong>Тема:</strong> {{ complaint.subject }}</p>
-<p class="complaint-message">{{ complaint.message }}</p>
+<div class="complaint-card">
+<div class="complaint-header">
+<div class="complaint-author">{{ complaint.name_surname or "Аноним" }}</div>
+<div class="complaint-date-tag">{{ complaint.created_at.strftime("%d.%m.%Y") }}</div>
+<div class="complaint-reaction-buttons">
+<button class="complaint-reaction-btn complaint-like-btn">👍 5</button>
+<button class="complaint-reaction-btn complaint-dislike-btn">👎 0</button>
+</div>
+</div>
+<div class="complaint-card-content">
+<div class="complaint-content-header">
+<div class="complaint-content-title">{{ complaint.subject }}</div>
+<div class="complaint-content-reactions">
+<div class="complaint-content-reaction">💬 0</div>
+</div>
+</div>
+<div class="complaint-content-text">{{ complaint.message }}</div>
 {% if complaint.admin_response %}
-<p class="complaint-response"><strong>Ответ администрации:</strong> {{ complaint.admin_response }}</p>
+<div class="complaint-response"><strong>Ответ администрации:</strong> {{ complaint.admin_response }}</div>
 {% endif %}
-<form method="post" action="/complaints/{{ complaint.id }}/delete" style="margin-top: 0.5rem;">
-<button type="submit" class="btn outline danger" onclick="return confirm('Удалить жалобу?');">Удалить</button>
+</div>
+<div class="complaint-actions">
+<form method="post" action="/complaints/{{ complaint.id }}/delete">
+<button type="submit" class="btn delete-btn" onclick="return confirm('Удалить жалобу?');"><i class="fa-solid fa-trash"></i></button>
 </form>
+</div>
 </div>
 {% endfor %}
 </div>
-
-<div class="pagination" style="margin-top: 2rem;">
+<div class="pagination">
 {% if has_prev %}
 <a href="?page={{ current_page - 1 }}" class="btn outline">← Назад</a>
 {% endif %}
-<span style="margin: 0 1rem;">Страница {{ current_page }} из {{ total_pages }}</span>
+<span>Страница {{ current_page }} из {{ total_pages }}</span>
 {% if has_next %}
 <a href="?page={{ current_page + 1 }}" class="btn outline">Вперёд →</a>
 {% endif %}
 </div>
 {% else %}
-<p>Пока жалоб нет.</p>
+<div class="no-complaints-msg">Пока жалоб нет.</div>
 {% endif %}
+
+</div>
 {% endblock %}

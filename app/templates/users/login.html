@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Вход — Yessenov University{% endblock %}
+{% block content %}
+<div class="content">
+<h2>Вход в систему</h2>
+{% if error %}
+<div class="form-errors">
+<ul>
+<li>{{ error }}</li>
+</ul>
+</div>
+{% endif %}
+<form method="post" action="/login" class="login-form">
+<div class="form-row">
+<label for="username">Логин (email или ID):</label>
+<input type="text" id="username" name="username" placeholder="Введите email или ID" required>
+</div>
+<div class="form-row">
+<label for="password">Пароль:</label>
+<input type="password" id="password" name="password" placeholder="Ваш пароль" required minlength="6">
+</div>
+<button type="submit" class="btn site-btn">Войти</button>
+<div class="login-links">
+<span>Нет аккаунта?</span> <a href="/register">Зарегистрироваться</a>
+</div>
+</form>
+</div>
+{% endblock %}
